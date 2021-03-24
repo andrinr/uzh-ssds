@@ -13,16 +13,17 @@ float c[N][N];
 struct mat_pos {
     int i;
     int j;
-}
+};
 
 void *matrix_multiplication_part(void *input){
+    printf("hello from thread");
     int i = ((struct mat_pos*)input)->i;
     int j = ((struct mat_pos*)input)->j;
     int k;
     for (k = 0; k < N; k++){
         c[i][j] += a[i][k] * b[k][j];
     }
-}
+};
 
 int main(int argc, char *argv[])
 {
@@ -32,9 +33,9 @@ int main(int argc, char *argv[])
 
     clock_t start, end;
 
-    puts("MM Sequential");
+    puts("MM Parallel");
 
-    printf("Input Matrix A_\n");
+    printf("Input Matrix A \n");
     for (i = 0; i < N; i++){
         for (j = 0; j < N; j++){
             scanf("%f", &a[i][j]);
@@ -57,7 +58,7 @@ int main(int argc, char *argv[])
             struct mat_pos *p = (struct mat_pos *)malloc(sizeof(struct mat_pos));
             p->i = i;
             p->j = j;
-            pthread_create(&threads[i][j], NULL, matrix_multiplication_part, (void*)p);
+            pthread_create(&threads[i][j], NULL, matrix_multiplication_part, (void*) p);
         }
     }
 
